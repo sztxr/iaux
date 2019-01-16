@@ -50,6 +50,24 @@ yarn install
 yarn run lerna bootstrap
 yarn run lerna link
 ```
+## Setup for use in Dweb
+(this was true for pre-refactor iaux, may still be ... )
+To use this file with dweb there are two complications which make all kinds of things break.
+
+Firstly dweb is JS, and this repo is mostly TS I had to work around this:
+```bash
+cd packages/iajs
+yarn                # Builds .js files in iajs/build
+```
+Including this package via links into other packages also ran into problems wit dependencies at the wrong places. 
+I found it required:
+```bash
+cd iaux && npm install babel-plugin-transform-class-properties
+```
+
+Other steps may be required with other packages
+
+## Running prototypes
 
 
 Prototypes can be run like this:
