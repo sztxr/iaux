@@ -1,5 +1,7 @@
 import fetch from 'node-fetch';
-
+import debugf from 'debug';
+const debug = debugf("iajs:metadata"); //TODO-ISSUE#5 (and see examples changed below)
+declare var DwebTransports; // This is initialized (along with DwebObjects) at application level TODO-ISSUE#3
 
 /**
  * This class is a wrapper for raw Metadata JSON responses
@@ -23,7 +25,7 @@ export class RawMetadataAPIResponse {
 
   constructor (responseData:object) {
     // Assign properties (might be a better way)
-    console.log(responseData)
+    debug('responseData=%O', responseData)
     Object.keys(responseData).forEach((property, index) => {
       if (responseData[property]) {
         this[property] = responseData[property]
@@ -80,20 +82,37 @@ export class MetadataService {
    * @param identifier the archive.org identifier
    */
   public async get (options:{identifier:string}):Promise<Metadata> {
-    return new Promise<Metadata>((resolve, reject) => {
-      fetch(`${this.API_BASE}/${options.identifier}`)
-        .then(res => res.text())
-        .then(body => {
-          let md_response = new RawMetadataAPIResponse(JSON.parse(body))
+    debug('getting metadata for %s', options.identifier);
+    //TODO-ISSUE#4a this wrapping promise is unneccessary, just return the fetch.then.then.catch chain which IS a promise
+    //return new Promise<Metadata>((resolve, reject) => {
+
+    return (( typeof DwebTransports !== "undefined") ? //TODO-ISSUE#3
+        // Use DwebTransports if defined to fetch metadata
+        DwebTransports.p_rawfetch([`dweb:/arc/archive.org/metadata/${options.identifier}`], {timeoutMS: 5000}) //TransportError if all urls fail (e.g. bad itemid)
+        // Note dweb-archivecontroller was using DwebObjects.utils.objectfrom(m); which is same as JSON.parse for most types,
+        // but maybe some other return type from p_rawfetch that JSON.parse cant handle in which case convert here and pass on to ...then(body
+        : (
+            // Simple original IAJS version not dependent on DwebTransports
+            fetch(`${this.API_BASE}/${options.identifier}`)
+                .then(res => res.text())
+                .then(body => JSON.parse(body))
+        ))
+        .then(obj => {
+          let md_response = new RawMetadataAPIResponse(obj);
           let md = new Metadata(md_response)
-          resolve(md)
+          // TODO-ISSUE#2 maybe enforce data contracts here instead of in ArchiveItem.fetch_metadata
+          return(md)
+          //resolve(md) //TODO-ISSUE#4a part of removing unneccessary wrapping promise
         })
-        .catch(() => {
+        .catch((err) => {
           let md_response = new RawMetadataAPIResponse({})
           let responseCode = 500 // TODO get responseCode
           let md = new Metadata(md_response, true, responseCode)
-          reject(md)
+          //reject(md)  // TODO-ISSUE#4b this has to be wrong, you can't reject something that isn't an error or at least shouldnt
+          throw(err)
         });
-    });
+    //TODO-ISSUE#4a closer for unneccessary extra Promise
+    //});
+
   }
 }
