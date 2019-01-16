@@ -1,4 +1,5 @@
 export { MetadataService } from './services/metadata'
+export { RawMetadataAPIResponse } from './services/metadata'
 export { RelatedService } from './services/related'
 export { BookReaderJsIaService } from './services/bookreader-jsia'
 export { Item } from './controllers/item/item'
