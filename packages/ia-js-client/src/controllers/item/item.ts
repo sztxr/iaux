@@ -1,4 +1,5 @@
 import { MetadataService, Metadata } from '../../services/metadata'
+import { RelatedService, Related } from '../../services/related'
 import { DetailsService, DetailsResponse } from '../../services/details'
 
 /**
@@ -58,15 +59,17 @@ export class Item {
   readonly identifier:string
 
   private metadataCache:Metadata
+  private relatedCache:Related
   private detailsDataCache:DetailsResponse|null
 
-  constructor (identifier:string, metadata?:Metadata) {
+  constructor (identifier:string, metadata?:Metadata, related?:Related) {
     this.identifier = identifier
     this.metadataCache = metadata
+    this.relatedCache = related
     this.detailsDataCache = null
   }
 
-  public async getMetadata ():Promise<Metadata> {
+  public async getMetadata ():Promise<Metadata> {//TODO-PROMISES I think getMetadata and getRelated  has an unneccessary promise wrapping
     return new Promise<Metadata>(async (resolve, reject) => {
       if (this.metadataCache) {
         resolve(this.metadataCache)
@@ -86,6 +89,18 @@ export class Item {
         value = [null]
       }
       resolve(md.data[field] || value)
+    })
+  }
+
+  public async getRelated ():Promise<Related> { //TODO-PROMISES I think getMetadata and getRelated has an unneccessary promise wrapping
+    return new Promise<Related>(async (resolve, reject) => {
+      if (this.relatedCache) {
+        resolve(this.relatedCache)
+      } else {
+        let relatedService = new RelatedService()
+        this.relatedCache = await relatedService.get({identifier: this.identifier})
+        resolve(this.relatedCache)
+      }
     })
   }
 
