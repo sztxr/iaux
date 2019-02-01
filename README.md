@@ -2,8 +2,20 @@
 
 Monorepo for Archive.org UX development and prototyping.
 
+**Note:** This is work-in-progress code, and until development has stabilized, things may change a lot. This library is being published with our use cases in mind and is not necessarily meant to be consumed by the broader public.
+
 There are multiple npm packages in this repo, and [Lerna](https://lernajs.io) is used to manage them.
 
+
+## Setup
+
+Install dependencies on all packages.
+
+```
+yarn install
+yarn run lerna bootstrap
+yarn run lerna link
+```
 
 ## Code Structure
 
@@ -39,17 +51,6 @@ Since the prototypes package is a "packages/prototypes" and there are a lot of o
 
 See [packages/ia-prototype-apps/README.md](packages/ia-prototype-apps/README.md) for more info.
 
-
-
-## Setup
-
-Install dependencies on all packages.
-
-```
-yarn install
-yarn run lerna bootstrap
-yarn run lerna link
-```
 ## Setup for use in Dweb
 (this was true for pre-refactor iaux, may still be ... )
 To use this file with dweb there are two complications which make all kinds of things break.
@@ -68,7 +69,6 @@ cd iaux && npm install babel-plugin-transform-class-properties
 Other steps may be required with other packages
 
 ## Running prototypes
-
 
 Prototypes can be run like this:
 
@@ -102,6 +102,14 @@ We use StorybookJS to show usage examples of our components.  For details on how
 Run Storybook:
 ```
 cd packages/ia-components && yarn run storybook
+```
+
+## Unit Testing with JestJS
+
+JestJS is pliable enough for us to test in JavaScript and TypeScript.
+Try running our tests:
+```
+cd packages/ia-components && yarn run test
 ```
 
 ## Other
