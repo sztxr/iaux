@@ -1,6 +1,7 @@
 {
-  "name": "ia-design-system",
-  "version": "0.3.0",
+  "name": "@internetarchive/ia-design-system",
+  "version": "0.3.1-alpha.20+5039f8d",
+  "license": "AGPL-3.0-only",
   "main": "public/scripts/index.js",
   "scripts": {
     "prepare": "yarn build:assets",
@@ -21,5 +22,8 @@
     "less-loader": "^4.1.0",
     "webpack": "^4.12.0",
     "webpack-cli": "^3.0.8"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

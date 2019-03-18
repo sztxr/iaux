@@ -1,10 +1,9 @@
 {
   "dependencies": {
-    "lerna": "^3.4.3",
-    "react": "^16.6.0",
+    "lerna": "^3.10.2"
   },
   "name": "iaux",
-  "license": "AGPL-3",
+  "license": "AGPL-3.0-only",
   "devDependencies": {
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",

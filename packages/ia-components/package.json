@@ -1,29 +1,27 @@
 {
-    "name": "ia-components",
-    "version": "0.0.0",
+    "name": "@internetarchive/ia-components",
+    "version": "0.0.0-alpha.20+5039f8d",
     "source": true,
-    "license": "AGPL-3",
+    "license": "AGPL-3.0-only",
     "scripts": {
         "storybook": "yarn run test:generate-output && yarn run storybook:start",
         "storybook:start": "start-storybook -p 9001 -c .storybook",
-        "test:generate-output": "jest --json --outputFile=jest-test-utils/jest-test-results.json || true",
+        "test:generate-output": "mkdir jest-test-utils && jest --json --outputFile=jest-test-utils/jest-test-results.json || true",
         "test:update-snapshots": "jest --updateSnapshot",
         "test": "jest --watch --coverage"
     },
     "devDependencies": {
         "@babel/core": "^7.2.2",
+        "@babel/plugin-proposal-class-properties": "^7.3.4",
+        "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
+        "@babel/plugin-transform-runtime": "^7.3.4",
+        "@internetarchive/ia-js-client": "^0.0.0-alpha.20+5039f8d",
         "@storybook/addon-a11y": "4.2.0-alpha.10",
         "@storybook/addon-jest": "^4.1.6",
         "@storybook/addon-knobs": "^4.1.4",
         "@storybook/react": "^4.1.4",
         "assert": "^1.4.1",
-        "babel-core": "^6.26.3",
-        "babel-loader": "^7.1.4",
-        "babel-plugin-transform-class-properties": "^6.24.1",
-        "babel-plugin-transform-object-rest-spread": "^6.26.0",
-        "babel-plugin-transform-runtime": "^6.23.0",
-        "babel-preset-env": "^1.7.0",
-        "babel-preset-react": "^6.24.1",
+        "babel-loader": "^8.0.5",
         "css-loader": "^2.1.0",
         "fsevents": "^1.2.4",
         "jest": "^23.6.0",
@@ -31,16 +29,19 @@
         "less-loader": "^4.1.0",
         "react-test-renderer": "^16.7.0",
         "storybook-addon-jsx": "^6.0.0",
-        "style-loader": "^0.23.1",
-        "ia-js-client": "^0.0.0"
+        "style-loader": "^0.23.1"
     },
     "dependencies": {
+        "lodash": "^4.17.11",
         "prop-types": "^15.6.2",
         "react": "^16.7.0",
         "react-dom": "^16.7.0",
         "react-jw-player": "^1.18.1"
     },
     "peerDependencies": {
-        "ia-js-client": "^0.0.0"
+        "@internetarchive/ia-js-client": "^0.0.0-alpha.20+5039f8d"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }

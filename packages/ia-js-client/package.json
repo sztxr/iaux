@@ -1,8 +1,8 @@
 {
-  "name": "ia-js-client",
-  "version": "0.0.0",
+  "name": "@internetarchive/ia-js-client",
+  "version": "0.0.0-alpha.20+5039f8d",
   "main": "build/index.js",
-  "license": "AGPL-3",
+  "license": "AGPL-3.0-only",
   "devDependencies": {
     "@types/node": "^10.7.1",
     "babel-core": "^6.26.3",
@@ -19,5 +19,8 @@
   },
   "dependencies": {
     "node-fetch": "^2.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
