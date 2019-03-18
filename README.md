@@ -58,7 +58,9 @@ Since the prototypes package is a "packages/prototypes" and there are a lot of o
 
 See [packages/ia-prototype-apps/README.md](packages/ia-prototype-apps/README.md) for more info.
 
-## Setup for use in Dweb
+## Setup for use in Dweb  
+TODO - CHECK THIS WITH NEW IAUX STRUCTURE
+
 (this was true for pre-refactor iaux, may still be ... )
 To use this file with dweb there are two complications which make all kinds of things break.
 
