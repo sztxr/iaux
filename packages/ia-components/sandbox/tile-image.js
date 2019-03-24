@@ -1,7 +1,7 @@
 import IAReactComponent from './IAReactComponent.js';
 import PropTypes from 'prop-types'
 
-export default class extends IAReactComponent { //TODO-DWEB this should probably be extens IAReactComponent
+export default class extends IAReactComponent { //TODO-DWEB this should probably be extends IAReactComponent
 
     static propTypes = {
         identifier: PropTypes.string.isRequired,

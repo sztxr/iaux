@@ -1,13 +1,15 @@
+require('babel-core/register')({presets: ['env', 'react']}); // ES6 JS below!
 import IAReactComponent from './IAReactComponent.js';
 import PropTypes from 'prop-types'
 import { Item } from 'ia-js-client'
 
 export default class extends IAReactComponent {
 
+  /*
   static propTypes = {
     item: PropTypes.instanceOf(Item).isRequired
   }
-
+  */
   constructor (props) {
     super(props)
 
