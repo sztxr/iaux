@@ -1,3 +1,4 @@
+import React from 'React';
 import IAReactComponent from '../IAReactComponent';
 
 export default class TileImage extends IAReactComponent {

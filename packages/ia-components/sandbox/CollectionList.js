@@ -1,15 +1,8 @@
-//This has been tested on IAUX & should be moveable to IAUX just by switching the commented headers below -
-//IAUX version
-if (!DwebArchive) {
-    import React from 'react'
-    import IAReactComponent from 'iacomponents/experimental/IAReactComponent';
-    import PropTypes from 'prop-types'
-} else {
-    //!IAUX version
-    import React from "../ReactFake";
-    import IAReactComponent from './IAReactComponent';
-    import ArchiveMemberSearch from "@internetarchive/dweb-archivecontroller/ArchiveMemberSearch";
-}
+import React from 'React';
+import IAReactComponent from './IAReactComponent';
+//import PropTypes from 'prop-types'
+import ArchiveMemberSearch from "@internetarchive/dweb-archivecontroller/ArchiveMemberSearch";
+
 export default class CollectionList extends IAReactComponent {
     /* Used in IAUX, but not in ReactFake
     static propTypes = {
