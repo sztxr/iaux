@@ -1,4 +1,5 @@
-import React from 'React';
+//import React from '../../ReactFake';
+import React from 'react';
 import IAReactComponent from '../IAReactComponent';
 
 export default class TileImage extends IAReactComponent {

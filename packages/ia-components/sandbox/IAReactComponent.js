@@ -1,17 +1,12 @@
-// TODO-IAUX debug dweb-archive to use real React for components - it *should* work, but will need tweaking component by component
-
-// Should hopefully be only pair of line needed to change between dweb-archive using ReactFake and IAUX using React
 import React from 'react'
-//import React from './ReactFake';
-
 import PropTypes from 'prop-types'
-
 const debug = require('debug')('dweb-archive:ConfigDetailsComponent');
 
 export default class IAReactComponent extends React.Component {
-    // Both dweb-archive.IAReactComponent used with ReactFake and iaux.IAReactComponent used with React should work the same. (e.g. ParentTileImg works with both)
+    // Both dweb-archive.IAFakeReactComponent used with ReactFake and iaux.IAReactComponent used with React should work the same. (e.g. ParentTileImg works with both)
     constructor(props) {
         super(props);
+        this.state = {}; // React doesnt do this
         // In both React & ReactFake, _isMounted is set to true on loading
         this._isMounted = false;
         // In both React & ReactFake If you give a HTML tag ref={this.load} then it will call loadcallable with 'this' set to the component and pass the element as the only parameter

@@ -1,10 +1,4 @@
-//This has been tested on IAUX & should be moveable to IAUX just by switching the commented headers below -
-//IAUX version
-//import React from 'react'
-//import IAReactComponent from 'iacomponents/experimental/IAReactComponent';
-//import PropTypes from 'prop-types'
-//!IAUX version
-import React from 'React';
+import React from 'react'
 import IAReactComponent from '../IAReactComponent';
 
 export default class ParentTileImg extends IAReactComponent {
@@ -26,7 +20,7 @@ export default class ParentTileImg extends IAReactComponent {
         } else {
             if (!this.props.parentidentifier) {
                 this.props.parentidentifier = this.props.member.collection0()
-                //TODO WOnt work its async || new ArchiveItem(this.props.member.identifier).fetch_metadata().metadata.collection[0];
+                    //TODO WOnt work its async || new ArchiveItem(this.props.member.identifier).fetch_metadata().metadata.collection[0];
             }
             urls = `/services/img/${this.props.parentidentifier}`;    // Intentionally no host - so works on both archive.org and via ReactFake.loadImg() on dweb and localhost
         }
