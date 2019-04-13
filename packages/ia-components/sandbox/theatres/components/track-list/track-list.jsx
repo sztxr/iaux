@@ -14,16 +14,22 @@ import { FlexboxPagination } from '../../../..';
  * @return { string or react fragment } trackTitle
  */
 const parseTrackTitle = ({
-  name, title, artist = '', creator, isAlbum
+  name,
+  title,
+  albumCreator,
+  creator = '',
+  artist = '',
+  isAlbum
 }) => {
   if (isAlbum) { return 'Full album'; }
 
-  const artistName = creator || artist;
+  const whichArtistVal = creator || artist;
+  const artistName = whichArtistVal !== albumCreator ? whichArtistVal : '';
 
   if (title) {
     return (
       <Fragment>
-        {`${title}${artistName ? ' - ' : '' }`}
+        {`${title}${artistName ? ' - ' : ''}`}
         <i>{artistName}</i>
       </Fragment>
     );
@@ -41,19 +47,24 @@ const parseTrackTitle = ({
  *
  * @return component
  */
-const trackButton = ({ selected, onSelected, thisTrack }) => {
+const trackButton = ({
+  selected, onSelected, thisTrack, displayTrackNumbers, albumCreator
+}) => {
   const { trackNumber, length, formattedLength } = thisTrack;
   const key = `individual-track-${trackNumber}`;
-  const trackTitle = parseTrackTitle(thisTrack);
+  const trackTitle = parseTrackTitle({ ...thisTrack, albumCreator });
   const displayNumber = parseInt(trackNumber, 10) || '-';
   const displayLength = formattedLength || length || '-- : --';
+
+  const trackButtonClass = `${selected ? 'selected ' : ''}track${!displayTrackNumbers ? ' no-track-number' : ''}`;
   return (
     <button
       type="button"
       data-track-number={trackNumber}
-      className={`${selected ? 'selected ' : ''}track`}
+      className={trackButtonClass}
       onClick={onSelected}
       key={key}
+      data-event-click-tracking="TrackList|Item"
     >
       <span className="track-number">{displayNumber}</span>
       <span className="track-title">{trackTitle}</span>
@@ -70,27 +81,24 @@ const trackButton = ({ selected, onSelected, thisTrack }) => {
  * @return component
  */
 class TheatreTrackList extends Component {
-  componentDidUpdate() {
-    // make sure focus stays on highlighted track;
-    const selected = document.querySelector('button.selected.track');
-    if (selected) {
-      selected.focus();
-    }
-  }
-
   render() {
-    const { selectedTrack, onSelected, tracks } = this.props;
+    const {
+      selectedTrack, onSelected, tracks, displayTrackNumbers, creator: albumCreator
+    } = this.props;
 
     return (
       <div className="audio-track-list">
         <FlexboxPagination
           itemInViewClass={`[data-track-number="${selectedTrack}"]`}
+          {...this.props}
         >
           {
             tracks.map((thisTrack) => {
               const { trackNumber } = thisTrack;
               const selected = trackNumber === selectedTrack;
-              return trackButton({ thisTrack, onSelected, selected });
+              return trackButton({
+                thisTrack, onSelected, selected, displayTrackNumbers, albumCreator
+              });
             })
           }
         </FlexboxPagination>
@@ -100,14 +108,17 @@ class TheatreTrackList extends Component {
 }
 
 TheatreTrackList.defaultProps = {
-  selectedTrack: null,
   tracks: null,
+  displayTrackNumbers: true,
+  creator: ''
 };
 
 TheatreTrackList.propTypes = {
   onSelected: PropTypes.func.isRequired,
-  selectedTrack: PropTypes.number,
+  selectedTrack: PropTypes.number.isRequired,
   tracks: PropTypes.array,
+  displayTrackNumbers: PropTypes.bool,
+  creator: PropTypes.string,
 };
 
 export default TheatreTrackList;

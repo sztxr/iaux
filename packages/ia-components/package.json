@@ -23,7 +23,6 @@
         "assert": "^1.4.1",
         "babel-loader": "^8.0.5",
         "css-loader": "^2.1.0",
-        "fsevents": "^1.2.4",
         "jest": "^23.6.0",
         "less": "^3.8.1",
         "less-loader": "^4.1.0",
@@ -35,11 +34,13 @@
         "lodash": "^4.17.11",
         "prop-types": "^15.6.2",
         "react": "^16.7.0",
-        "react-dom": "^16.7.0",
-        "react-jw-player": "^1.18.1"
+        "react-dom": "^16.7.0"
     },
     "peerDependencies": {
         "@internetarchive/ia-js-client": "^0.0.0-alpha.20+5039f8d"
+    },
+    "optionalDependencies": {
+        "fsevents": "^1.2.4"
     },
     "publishConfig": {
         "access": "public"

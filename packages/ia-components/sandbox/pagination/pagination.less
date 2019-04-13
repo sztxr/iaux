@@ -3,26 +3,20 @@
 .flexbox-pagination {
   display: flex;
   align-items: stretch;
-  margin-top: 2rem;
-  flex-flow: column wrap;
-
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: inherit; // must set with parent to wrap columns
+  overflow: hidden;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
 
-  @media (max-width: 50rem) {
-    flex-flow: column;
-    height: 30rem;
+  @media (max-width: @width-500) {
+    flex-wrap: nowrap;
   }
 
-  @media (min-width: @audio-player-desktop-min-width) {
-    max-height: 48rem;
-    overflow-x: hidden;
-    overflow-y: hidden;
-
-    &.half {
-      > * {
-        width: 50%;
-      }
+  &.column {
+    > * {
+      width: inherit; // set at parent, for better display control
     }
   }
 }

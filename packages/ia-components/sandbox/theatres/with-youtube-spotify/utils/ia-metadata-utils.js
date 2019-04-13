@@ -1,5 +1,10 @@
 import {
-  includes, reduce, endsWith, filter, uniq, merge
+  includes,
+  reduce,
+  endsWith,
+  filter,
+  merge,
+  chain,
 } from 'lodash';
 
 /**
@@ -18,7 +23,7 @@ const fetchYoutubeAndSpotifyInfo = (externalIdentifiers = []) => {
     },
     youtube: {
       urlPrefix: 'https://www.youtube.com/embed/',
-      urlExtensions: `?fs=1&modestbranding=1&rel=0&autoplay=1&origin=${window.location.origin}` // todo: add origin='https://www.archive.org'
+      urlExtensions: `?fs=1&rel=0&autoplay=1&origin=${window.location.origin}` // todo: add origin='https://www.archive.org'
     }
   };
   const externalIDs = !Array.isArray(externalIdentifiers) ? [externalIdentifiers] : externalIdentifiers;
@@ -44,7 +49,7 @@ const fetchYoutubeAndSpotifyInfo = (externalIdentifiers = []) => {
  * @param { object } metadata - return response from metadata API
  * @returns { array } of original tracks with nested related data
  */
-const flattenAlbumData = (metadata) => {
+const flattenAlbumData = (metadata, playFullIAAudio) => {
   const {
     dir: directoryPath,
     server,
@@ -59,7 +64,7 @@ const flattenAlbumData = (metadata) => {
    * Take original item's file list & only return the files we are interested in
    */
   const slimFiles = reduce(fileNames, (neededFiles = [], fileName) => {
-    const neededExtensions = /(mp3|ogg|flac|jpg|png|jpeg)$/gi;
+    const neededExtensions = /(mp3|ogg|flac|m4a|jpg|png|jpeg)$/gi;
     const isNeededFile = fileName.match(neededExtensions);
     const file = allFiles[fileName];
     file.name = fileName.slice(1, fileName.length);
@@ -69,7 +74,7 @@ const flattenAlbumData = (metadata) => {
     return neededFiles;
   }, []);
 
-  const playSamples = includes(collection, 'samples_only');
+  const playSamples = playFullIAAudio ? false : includes(collection, 'samples_only');
   const albumSpotifyYoutubeInfo = fetchYoutubeAndSpotifyInfo(albumMetadata['external-identifier']) || {};
   const trackFilesHaveYoutubeSpotify = [];
   let itemPhoto = '';
@@ -87,7 +92,7 @@ const flattenAlbumData = (metadata) => {
     let flattenedImportantRelatedFiles = null;
     const externalIdentifiers = currentFile['external-identifier'] || null;
     const isOriginal = source === 'original';
-    const isAudioFile = currentFileName.match(/(mp3|ogg|flac)$/g);
+    const isAudioFile = currentFileName.match(/(mp3|ogg|flac|m4a)$/g);
     const isItemImageFile = isOriginal && currentFileName.match(/(png|jpg|jpeg)$/gi);
 
     // skip unneeded files
@@ -147,6 +152,17 @@ const flattenAlbumData = (metadata) => {
   }, []);
 
   // What we need for display:
+  const externalSourcesDisplayValues = {
+    spotify: 'Spotify',
+    youtube: 'YouTube'
+  };
+
+  const aggregatedExternalSources = chain([
+    trackFilesHaveYoutubeSpotify,
+    Object.keys(albumSpotifyYoutubeInfo)
+  ])
+    .flatten().uniq().value();
+
   const albumData = Object.assign(
     {},
     albumMetadata,
@@ -156,7 +172,8 @@ const flattenAlbumData = (metadata) => {
       playSamples,
       tracks,
       albumSpotifyYoutubeInfo,
-      externalSources: uniq(trackFilesHaveYoutubeSpotify, Object.keys(albumSpotifyYoutubeInfo))
+      externalSources: aggregatedExternalSources,
+      externalSourcesDisplayValues
     },
   );
   return albumData;
