@@ -55,21 +55,16 @@ export class RelatedService {
   //TODO use similar patterns to metadata.ts to return a typed data structure
 
   public async get (options: {identifier:string}):Promise<any> {
-    debug('getting related for %s', options.identifier);
-    return fetch(`${this.API_BASE}/get_related/all/${options.identifier}`)
+      fetch(`${this.API_BASE}/get_related/all/${options.identifier}`)
         .then(res => res.text())
-        .then(body => JSON.parse(body))
-        .then(obj => { //TODO-MITRA compact this once tested
-          const rel_response = new RawRelatedAPIResponse(obj);
-          const rel = new Related(rel_response)
-          return (rel)
+        .then(body => {
+          let raw_response = JSON.parse(body)
+          return(raw_response) // Should probably return new Related(new RelatedAPIResponse(obj)
         })
-        .catch((err) => { //TODO-MITRA should return Related
-          const rel_response = new RawRelatedAPIResponse({hits: {hits: []}});
-          const responseCode = 500 // TODO get responseCode
-          const rel = new Related(rel_response, true, responseCode)
-          //reject(md)  // TODO-ISSUE#4b this has to be wrong, you can't reject something that isn't an error or at least shouldnt - its either return(rel) or ...
-          throw(err);
+        .catch((err) => {
+            throw err;
+            // let empty_reponse = { hits: { hits: [] } }
+            //reject(empty_reponse) // This is nonsense - shouldn't reject with data, only errors - its a "resolve" if data is substituted, and anyway only current caller is not checking for this reject anyway !
         });
   }
 }

@@ -7,6 +7,7 @@ declare var DwebTransports; // This is initialized (along with DwebObjects) at a
  * This class is a wrapper for raw Metadata JSON responses
  */
 export class RawMetadataAPIResponse {
+  // This is the data exactly as returned from the metadata API - in particular no check against fulfilling content has been done.
   created:number
   d1:string
   d2:string
@@ -80,12 +81,9 @@ export class MetadataService {
   /**
    * Fetches the full Metadata for an item
    * @param identifier the archive.org identifier
+   * @returns Metadata - encapsulation of raw metadata from the API call
    */
-  public async get (options:{identifier:string}):Promise<Metadata> {
-    debug('getting metadata for %s', options.identifier);
-    //TODO-ISSUE#4a this wrapping promise is unneccessary, just return the fetch.then.then.catch chain which IS a promise
-    //return new Promise<Metadata>((resolve, reject) => {
-
+  public get (options:{identifier:string}):Promise<Metadata> {
     return (( typeof DwebTransports !== "undefined") ? //TODO-ISSUE#3
         // Use DwebTransports if defined to fetch metadata
         DwebTransports.p_rawfetch([`dweb:/arc/archive.org/metadata/${options.identifier}`], {timeoutMS: 5000}) //TransportError if all urls fail (e.g. bad itemid)
@@ -97,22 +95,23 @@ export class MetadataService {
                 .then(res => res.text())
                 .then(body => JSON.parse(body))
         ))
-        .then(obj => {
-          let md_response = new RawMetadataAPIResponse(obj);
-          let md = new Metadata(md_response)
-          // TODO-ISSUE#2 maybe enforce data contracts here instead of in ArchiveItem.fetch_metadata
-          return(md)
-          //resolve(md) //TODO-ISSUE#4a part of removing unneccessary wrapping promise
+        fetch(`${this.API_BASE}/${options.identifier}`)
+        .then(res => res.text())
+        .then(body => {
+          let md_response = new RawMetadataAPIResponse(JSON.parse(body))
+          let md = new Metadata(md_response) // TODO-ISSUE#2 maybe enforce data contracts here instead of in ArchiveItem.fetch_metadata
+          return(md);
         })
         .catch((err) => {
+          console.log("Metadata fetch failed");
+          //TODO-ERRORS - note nothing that calls this actually checks whether the promise ended in a rejection ! Each caller has been commented as well.
+          throw(err);
+          /* It makes no sense to reject(md) can only reject errors
           let md_response = new RawMetadataAPIResponse({})
           let responseCode = 500 // TODO get responseCode
           let md = new Metadata(md_response, true, responseCode)
-          //reject(md)  // TODO-ISSUE#4b this has to be wrong, you can't reject something that isn't an error or at least shouldnt
-          throw(err)
+          reject(md)
+           */
         });
-    //TODO-ISSUE#4a closer for unneccessary extra Promise
-    //});
-
   }
 }
