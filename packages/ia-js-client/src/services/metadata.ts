@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
-import debugf from 'debug';
-const debug = debugf("iajs:metadata"); //TODO-ISSUE#5 (and see examples changed below)
+const debug = require('debug')('ia-js-client:metadata');
 declare var DwebTransports; // This is initialized (along with DwebObjects) at application level TODO-ISSUE#3
 
 /**
@@ -26,7 +25,7 @@ export class RawMetadataAPIResponse {
 
   constructor (responseData:object) {
     // Assign properties (might be a better way)
-    debug('responseData=%O', responseData)
+    debug(responseData)
     Object.keys(responseData).forEach((property, index) => {
       if (responseData[property]) {
         this[property] = responseData[property]
@@ -103,7 +102,7 @@ export class MetadataService {
           return(md);
         })
         .catch((err) => {
-          console.log("Metadata fetch failed");
+          debug("Metadata fetch failed");
           //TODO-ERRORS - note nothing that calls this actually checks whether the promise ended in a rejection ! Each caller has been commented as well.
           throw(err);
           /* It makes no sense to reject(md) can only reject errors

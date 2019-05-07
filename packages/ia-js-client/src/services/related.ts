@@ -51,20 +51,19 @@ export class RelatedService {
    * Fetches the full Metadata for an item
    * @param identifier the archive.org identifier
    */
-
   //TODO use similar patterns to metadata.ts to return a typed data structure
 
-  public async get (options: {identifier:string}):Promise<any> {
-      fetch(`${this.API_BASE}/get_related/all/${options.identifier}`)
-        .then(res => res.text())
-        .then(body => {
-          let raw_response = JSON.parse(body)
-          return(raw_response) // Should probably return new Related(new RelatedAPIResponse(obj)
-        })
-        .catch((err) => {
-            throw err;
-            // let empty_reponse = { hits: { hits: [] } }
-            //reject(empty_reponse) // This is nonsense - shouldn't reject with data, only errors - its a "resolve" if data is substituted, and anyway only current caller is not checking for this reject anyway !
-        });
+  public async get(options: { identifier: string }): Promise<any> {
+    fetch(`${this.API_BASE}/get_related/all/${options.identifier}`)
+      .then(res => res.text())
+      .then(body => {
+        let raw_response = JSON.parse(body)
+        return (raw_response) // Should probably return new Related(new RelatedAPIResponse(obj)
+      })
+      .catch((err) => {
+        throw err;
+        // let empty_reponse = { hits: { hits: [] } }
+        //reject(empty_reponse) // This is nonsense - shouldn't reject with data, only errors - its a "resolve" if data is substituted, and anyway only current caller is not checking for this reject anyway !
+      });
   }
 }

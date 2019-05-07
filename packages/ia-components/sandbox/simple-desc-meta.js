@@ -29,7 +29,7 @@ export default class extends IAReactComponent {
     let displayableMetadata = {... this.state.metadata.metadata} //2RICHARD: The result of the promise is a RawMetaDataResponse, not Metadata I fixed it
 
     // ['description'].forEach(key => {
-    //   console.log(key)
+    //   debug(key)
     //   // if (typeof displayableMetadata[key] !== undefined)
     //   //   delete displayableMetadata[key]
     // })
