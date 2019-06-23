@@ -78,6 +78,7 @@ class AudioPlayerWithYoutubeSpotify extends Component {
     this.onChannelSelect = this.onChannelSelect.bind(this);
     this.jwplayerPlaylistChange = this.jwplayerPlaylistChange.bind(this);
     this.jwplayerStartingPoint = this.jwplayerStartingPoint.bind(this);
+    this.youtubePlaylistChange = this.youtubePlaylistChange.bind(this);
     this.getSelectableChannels = this.getSelectableChannels.bind(this);
     this.getAudioSourceInfoToPlay = this.getAudioSourceInfoToPlay.bind(this);
   }
@@ -139,6 +140,19 @@ class AudioPlayerWithYoutubeSpotify extends Component {
   jwplayerStartingPoint(index) {
     this.setState({ trackStartingPoint: index + 1 });
   }
+
+  /**
+   * Callback every time YoutubePlayer changes track
+   * @param { number } prevTrack- Track number of previously played video
+   */
+  youtubePlaylistChange(prevTrack) {
+    const { tracklistToShow } = this.state;
+    // Find next track number in line
+    const trackSelected = tracklistToShow.find(t => t.trackNumber >= prevTrack + 1);
+    if (trackSelected) {
+      this.setState({ trackSelected: trackSelected.trackNumber });
+    }
+}
 
   /**
    * Callback every time user selects a track from the tracklist
@@ -290,6 +304,7 @@ class AudioPlayerWithYoutubeSpotify extends Component {
             linerNotes={linerNotes}
             jwplayerPlaylistChange={this.jwplayerPlaylistChange}
             jwplayerStartingPoint={this.jwplayerStartingPoint}
+            youtubePlaylistChange={this.youtubePlaylistChange}
             jwplayerInfo={jwplayerInfo}
             jwplayerID={`jwplayer-${jwplayerID}`}
           />

@@ -4,6 +4,7 @@ import ArchiveAudioPlayer from './archive-audio-jwplayer-wrapper';
 import ThirdPartyEmbeddedPlayer from './third-party-embed';
 import { HorizontalRadioGroup } from '../../index';
 import BookReaderWrapper from '../bookreader-component/bookreader-wrapper-main';
+import YoutubePlayer from './youtube-player';
 
 /**
  * Draw background photo
@@ -74,10 +75,25 @@ export default class TheatreAudioPlayer extends Component {
     const { source, sourceData } = this.props;
     const isExternal = source === 'youtube' || source === 'spotify';
     let mediaElement = null;
-    if (isExternal) {
+    const externalSourceDetails = sourceData[source] || {};
+    if (source === 'youtube') {
+      const { urlSetterFN } = this.state;
+      const { id = '' } = externalSourceDetails;
+      const { trackNumber = 1 } = sourceData;
+      mediaElement = (
+        <YoutubePlayer
+          selectedTrack={trackNumber}
+          id={id}
+          {...this.props}
+
+        />
+      ); // don't send all props send only youtubePlaylistChange
+      if (urlSetterFN) {
+        urlSetterFN(trackNumber);
+      }
+    } else if (source === 'spotify') {
       // make iframe with URL
       const { urlSetterFN } = this.state;
-      const externalSourceDetails = sourceData[source] || {};
       const {
         urlPrefix = '', id = '', urlExtensions = '', name = ''
       } = externalSourceDetails;
@@ -97,7 +113,6 @@ export default class TheatreAudioPlayer extends Component {
       }
     }
     const archiveStyle = isExternal ? { visibility: 'hidden' } : { visibility: 'visible' };
-
     return (
       <Fragment>
         <ArchiveAudioPlayer
