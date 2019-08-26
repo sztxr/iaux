@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element'
+import { LitElement, html, css } from 'lit-element';
 
 class UserMenu extends LitElement {
 
@@ -10,11 +10,14 @@ class UserMenu extends LitElement {
   }
 
   render() {
+    const userMenuClass = this.userMenuOpen ? 'user-menu open slide-in' : this.userMenuAnimate ? 'user-menu slide-out' : 'user-menu';
+    const userMenuHidden = this.userMenuOpen ? 'false' : 'true';
+    const userMenuExpanded = this.userMenuOpen ? 'true' : 'false';
     return html`
     <nav
-      class="${this.userMenuOpen ? 'user-menu open slide-in' : this.userMenuAnimate ? 'user-menu slide-out' : 'user-menu'}"
-      aria-hidden="${this.userMenuOpen ? 'false' : 'true'}"
-      aria-expanded="${this.userMenuOpen ? 'true' : 'false'}"
+      class="${userMenuClass}"
+      aria-hidden="${userMenuHidden}"
+      aria-expanded="${userMenuExpanded}"
     >
       <div><a href="#"><b>USERNAME</b></a></div>
       <div><a href="#">Upload</a></div>
@@ -31,47 +34,46 @@ class UserMenu extends LitElement {
 
   static get styles() {
     return css`
-      /**Now, activate animation class on click and send to this componenent. When it is on the add classes for aniation slide-in and slide-out*/
       .user-menu {
         margin: 0px;
         float: right;
         width: 150px;
         background-color: #333;
         padding: 5px 10px;
-        transform: translate(0px, -500px);
+        transform: translate(0px, -1000px);
       }
       .open {
-        transform: translate(0px, 0px);
+        transform: translate(0px, -220px);
         z-index: 1;
       }
       @keyframes slide-in {
         0% {
-          transform: translate(0px, -500px);
+          transform: translate(0px, -1000px);
         }
         100% {
-          transform: translate(0px, 0px);
+          transform: translate(0px, -220px);
         }
       }
       @keyframes slide-out {
         0% {
-          transform: translate(0px, 0px);
+          transform: translate(0px, -220px);
         }
         100% {
-          transform: translate(0px, -500px);
+          transform: translate(0px, -1000px);
         }
       }
       .slide-in {
-        animation: slide-in 0.6s forwards;
+        animation: slide-in 0.5s forwards;
       }
       .slide-out {
-        animation: slide-out 0.6s forwards;
+        animation: slide-out 0.5s forwards;
       }
       .user-menu div {
         padding: 10px;
       }
       a {
         font-family: "Helvetica Neue";
-        color: #fff;
+        color: var(--white);
         text-decoration: none;
       }
      `;
