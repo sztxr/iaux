@@ -18,7 +18,7 @@ const transcript = [
       "start": 10.03,
       "end": 14.093,
       "text": "Russia by approving sanctions against Moscow and the Kremlin agreed that penalties",
-      "is_music": false
+      "is_music": true
   },
   {
       "id": 4,
