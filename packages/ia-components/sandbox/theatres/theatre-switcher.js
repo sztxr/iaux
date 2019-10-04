@@ -37,13 +37,6 @@ export default class TheatreSwitcher extends React.Component {
   render () {
     let theatreEl = <div>No theatre</div>
     switch (this.state.theatreType) {
-      case TheatreSwitcher.THEATRE_TYPES.BOOKREADER:
-        theatreEl = <div style={{
-          color: 'grey',
-          textAlign: 'center',
-          paddingTop: '100px'
-        }}>No displayable media.</div>
-        break;
       case TheatreSwitcher.THEATRE_TYPES.AUDIO:
         theatreEl = <Audio1 identifier={this.props.item.identifier} />
         break;
